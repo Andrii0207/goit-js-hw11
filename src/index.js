@@ -7,14 +7,14 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 const refs = {
   form: document.querySelector('#search-form'),
   input: document.querySelector('.searh-input'),
-  searchBtn: document.querySelector('.search-btn'),
+  // searchBtn: document.querySelector('.search-btn'),
   galleryEl: document.querySelector('.gallery'),
   loadMore: document.querySelector('.load-more'),
 };
-refs.loadMore.setAttribute('hidden', 'hidden');
 
+refs.loadMore.setAttribute('hidden', 'hidden');
 refs.form.addEventListener('input', debounce(onClickBtnSubmit, 500));
-refs.loadMore.addEventListener('click', onLoadMoreImages);
+refs.loadMore.addEventListener('click', onClickAddPage);
 
 function fetchData(value, page = 1) {
   const KEY = '30810402-d2272724878c47174b870ed5b';
@@ -34,7 +34,8 @@ let page = 1;
 
 function onClickBtnSubmit(event) {
   event.preventDefault();
-  const value = refs.input.value.toLowerCase().trim();
+  value = refs.input.value.toLowerCase().trim();
+  console.log('value:', value);
 
   if (!value) {
     clearInput();
@@ -51,11 +52,10 @@ function onClickBtnSubmit(event) {
   }
 }
 
-function onLoadMoreImages() {
+function onClickAddPage() {
   page += 1;
   fetchData(value, page)
-    .then(responce => createGallery(responce, page))
-    .then(responce => console.log('page +1', responce))
+    .then(responce => onLoadMoreImages(responce, page))
     .catch(error => console.log(error));
 }
 
@@ -75,7 +75,7 @@ function checkResponce(responce) {
 }
 
 function createGallery(images) {
-  console.log('responceAPI', images);
+  console.log('createGallery data', images);
 
   const galleryList = images
     .map(
@@ -92,22 +92,23 @@ function createGallery(images) {
     <img src="${webformatURL}" alt="${tags}" loading="lazy" width=320px heith=240px />
     <div class="info">
       <p class="info-item">
-        <b>Likes</b>${likes}
+        <b>Likes: </b>${likes}
       </p>
       <p class="info-item">
-        <b>Views</b>${views}
+        <b>Views: </b>${views}
       </p>
       <p class="info-item">
-        <b>Comments</b>${comments}
+        <b>Comments: </b>${comments}
       </p>
       <p class="info-item">
-        <b>Downloads</b>${downloads}
+        <b>Downloads: </b>${downloads}
       </p>
     </div>
   </div>
 </a>`,
     )
     .join('');
+
   refs.galleryEl.insertAdjacentHTML('beforeend', galleryList);
 
   const lightbox = new SimpleLightbox('.gallery a', {
@@ -116,6 +117,15 @@ function createGallery(images) {
     close: false,
   });
   lightbox.refresh();
+}
+
+function onLoadMoreImages(responce, step) {
+  console.log('onLoadMoreImages data', responce);
+
+  const responceHits = responce.hits;
+  const responceTotalHits = responce.totalHits;
+  console.log('onLoadMoreImages responceHits', responceHits);
+  createGallery(responceHits);
 }
 
 function clearInput() {

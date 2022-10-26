@@ -19,7 +19,7 @@ refs.loadMore.addEventListener('click', onClickAddPage);
 function fetchData(value, page = 1) {
   const KEY = '30810402-d2272724878c47174b870ed5b';
   const BASE_URL = 'https://pixabay.com/api/';
-  const URL = `${BASE_URL}?key=${KEY}&q=${value}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=3`;
+  const URL = `${BASE_URL}?key=${KEY}&q=${value}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=40`;
 
   return fetch(URL).then(responce => {
     if (!responce.ok) {
@@ -92,16 +92,16 @@ function createGallery(images) {
     <img src="${webformatURL}" alt="${tags}" loading="lazy" width=320px heith=240px />
     <div class="info">
       <p class="info-item">
-        <b>Likes: </b>${likes}
+        <b>Likes </b>${likes}
       </p>
       <p class="info-item">
-        <b>Views: </b>${views}
+        <b>Views </b>${views}
       </p>
       <p class="info-item">
-        <b>Comments: </b>${comments}
+        <b>Comments </b>${comments}
       </p>
       <p class="info-item">
-        <b>Downloads: </b>${downloads}
+        <b>Downloads </b>${downloads}
       </p>
     </div>
   </div>
@@ -124,18 +124,26 @@ function onLoadMoreImages(responce, step) {
 
   const responceHits = responce.hits;
   const responceTotalHits = responce.totalHits;
+  const totalPages = responceTotalHits / 40;
+
   console.log('onLoadMoreImages responceHits', responceHits);
+
+  if (step > totalPages) {
+    Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+    refs.loadMore.setAttribute('hidden', 'hidden');
+  }
   createGallery(responceHits);
+  smoothScroll();
 }
 
 function clearInput() {
   refs.galleryEl.innerHTML = '';
 }
 
-// webformatURL - ссылка на маленькое изображение для списка карточек.
-// largeImageURL - ссылка на большое изображение.
-// tags - строка с описанием изображения. Подойдет для атрибута alt.
-// likes - количество лайков.
-// views - количество просмотров.
-// comments - количество комментариев.
-// downloads - количество загрузок.
+function smoothScroll() {
+  const { height: cardHeight } = refs.galleryEl.firstElementChild.getBoundingClientRect();
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+  });
+}

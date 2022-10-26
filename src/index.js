@@ -119,7 +119,7 @@ function createGallery(images) {
   lightbox.refresh();
 }
 
-function onLoadMoreImages(responce, step) {
+function onLoadMoreImages(responce, page) {
   console.log('onLoadMoreImages data', responce);
 
   const responceHits = responce.hits;
@@ -128,7 +128,7 @@ function onLoadMoreImages(responce, step) {
 
   console.log('onLoadMoreImages responceHits', responceHits);
 
-  if (step > totalPages) {
+  if (page > totalPages) {
     Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
     refs.loadMore.setAttribute('hidden', 'hidden');
   }

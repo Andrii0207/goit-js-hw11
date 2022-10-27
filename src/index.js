@@ -89,7 +89,9 @@ function createGallery(images) {
         downloads,
       }) => `<a class="gallery_link" href="${largeImageURL}">
   <div class="photo-card">
+  <div class="photo-card_wrapper">
     <img src="${webformatURL}" alt="${tags}" loading="lazy" width=320px heith=240px />
+  </div>
     <div class="info">
       <p class="info-item">
         <b>Likes </b>${likes}

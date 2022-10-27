@@ -60,8 +60,6 @@ function onClickAddPage() {
 function checkResponce(responce) {
   const responceHits = responce.hits;
   const responceTotalHits = responce.totalHits;
-  console.log('checkResponce- responce', responce);
-  console.log('responceHits', responceHits);
 
   if (responceHits.length !== 0) {
     Notiflix.Notify.success(`Hooray! We found ${responceTotalHits} images`);

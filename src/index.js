@@ -7,12 +7,11 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 const refs = {
   form: document.querySelector('#search-form'),
   input: document.querySelector('.searh-input'),
-  // searchBtn: document.querySelector('.search-btn'),
   galleryEl: document.querySelector('.gallery'),
   loadMore: document.querySelector('.load-more'),
 };
 
-refs.loadMore.setAttribute('hidden', 'hidden');
+// refs.loadMore.setAttribute('hidden', 'hidden');
 refs.form.addEventListener('input', debounce(onClickBtnSubmit, 500));
 refs.loadMore.addEventListener('click', onClickAddPage);
 
@@ -35,17 +34,16 @@ let page = 1;
 function onClickBtnSubmit(event) {
   event.preventDefault();
   value = refs.input.value.toLowerCase().trim();
-  console.log('value:', value);
 
   if (!value) {
     clearInput();
+    refs.loadMore.setAttribute('hidden', 'hidden');
     Notiflix.Notify.failure(
       'Sorry, there are no images matching your search query. Please try again.',
     );
     return;
   } else {
     clearInput();
-    refs.loadMore.removeAttribute('hidden');
     fetchData(value, page)
       .then(checkResponce)
       .catch(error => console.log(error));
@@ -62,10 +60,13 @@ function onClickAddPage() {
 function checkResponce(responce) {
   const responceHits = responce.hits;
   const responceTotalHits = responce.totalHits;
+  console.log('checkResponce- responce', responce);
+  console.log('responceHits', responceHits);
 
-  if (responceTotalHits.length !== 0) {
+  if (responceHits.length !== 0) {
     Notiflix.Notify.success(`Hooray! We found ${responceTotalHits} images`);
     createGallery(responceHits);
+    refs.loadMore.removeAttribute('hidden');
   } else {
     clearInput();
     Notiflix.Notify.failure(
@@ -75,8 +76,6 @@ function checkResponce(responce) {
 }
 
 function createGallery(images) {
-  console.log('createGallery data', images);
-
   const galleryList = images
     .map(
       ({
@@ -87,23 +86,23 @@ function createGallery(images) {
         views,
         comments,
         downloads,
-      }) => `<a class="gallery_link" href="${largeImageURL}">
+      }) => `<a class="gallery_link link" href="${largeImageURL}">
   <div class="photo-card">
   <div class="photo-card_wrapper">
-    <img src="${webformatURL}" alt="${tags}" loading="lazy" width=320px heith=240px />
+    <img class="gallery__img" src="${webformatURL}" alt="${tags}" loading="lazy"/>
   </div>
-    <div class="info">
+    <div class="gallery-info__box">
       <p class="info-item">
-        <b>Likes </b>${likes}
+        <b>Likes:</b>${likes}
       </p>
       <p class="info-item">
-        <b>Views </b>${views}
+        <b>Views:</b>${views}
       </p>
       <p class="info-item">
-        <b>Comments </b>${comments}
+        <b>Comments:</b>${comments}
       </p>
       <p class="info-item">
-        <b>Downloads </b>${downloads}
+        <b>Downloads:</b>${downloads}
       </p>
     </div>
   </div>
@@ -122,13 +121,9 @@ function createGallery(images) {
 }
 
 function onLoadMoreImages(responce, page) {
-  console.log('onLoadMoreImages data', responce);
-
   const responceHits = responce.hits;
   const responceTotalHits = responce.totalHits;
   const totalPages = responceTotalHits / 40;
-
-  console.log('onLoadMoreImages responceHits', responceHits);
 
   if (page > totalPages) {
     Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");

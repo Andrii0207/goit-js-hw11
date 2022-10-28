@@ -3,30 +3,36 @@ import debounce from 'lodash.debounce';
 import markup from '../templates/markup.hbs';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
+import refs from './js/refs';
+import fetchData from './js/fetch';
 
-const refs = {
-  form: document.querySelector('#search-form'),
-  input: document.querySelector('.searh-input'),
-  galleryEl: document.querySelector('.gallery'),
-  loadMore: document.querySelector('.load-more'),
-};
+// const refs = {
+//   form: document.querySelector('#search-form'),
+//   input: document.querySelector('.searh-input'),
+//   galleryEl: document.querySelector('.gallery'),
+//   loadMore: document.querySelector('.load-more'),
+// };
 
 // refs.loadMore.setAttribute('hidden', 'hidden');
 refs.form.addEventListener('input', debounce(onClickBtnSubmit, 500));
 refs.loadMore.addEventListener('click', onClickAddPage);
 
-function fetchData(value, page = 1) {
-  const KEY = '30810402-d2272724878c47174b870ed5b';
-  const BASE_URL = 'https://pixabay.com/api/';
-  const URL = `${BASE_URL}?key=${KEY}&q=${value}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=40`;
+// function fetchData(value, page = 1) {
+//   try {
+//     const KEY = '30810402-d2272724878c47174b870ed5b';
+//     const BASE_URL = 'https://pixabay.com/api/';
+//     const URL = `${BASE_URL}?key=${KEY}&q=${value}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=40`;
 
-  return fetch(URL).then(responce => {
-    if (!responce.ok) {
-      throw new Error('error');
-    }
-    return responce.json();
-  });
-}
+//     return fetch(URL).then(responce => {
+//       if (!responce.ok) {
+//         throw new Error('error');
+//       }
+//       return responce.json();
+//     });
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
 
 let value = null;
 let page = 1;
@@ -87,7 +93,7 @@ function createGallery(images) {
       }) => `<a class="gallery_link link" href="${largeImageURL}">
   <div class="photo-card">
   <div class="photo-card_wrapper">
-    <img class="gallery__img" src="${webformatURL}" alt="${tags}" loading="lazy"/>
+    <img class="gallery__img" src="${webformatURL}" alt="${tags}" loading="lazy" width=320 heigth=240/>
   </div>
     <div class="gallery-info__box">
       <p class="info-item">

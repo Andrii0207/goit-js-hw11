@@ -40,11 +40,12 @@ let page = 1;
 
 function onClickBtnSubmit(event) {
   event.preventDefault();
-  page += 1;
+  page = 1;
+
   value = refs.input.value.toLowerCase().trim();
 
   if (!value) {
-    // clearInput();
+    clearInput();
     // refs.loadMore.setAttribute('hidden', 'hidden');
     Notiflix.Notify.failure(
       'Sorry, there are no images matching your search query. Please try again.',

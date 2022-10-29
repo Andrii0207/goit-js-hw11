@@ -14,7 +14,7 @@ import createGallery from './js/createGallery';
 //   loadMore: document.querySelector('.load-more'),
 // };
 
-// refs.loadMore.setAttribute('hidden', 'hidden');
+refs.loadMore.setAttribute('hidden', 'hidden');
 refs.form.addEventListener('submit', onClickBtnSubmit);
 refs.loadMore.addEventListener('click', onClickAddPage);
 
@@ -40,18 +40,19 @@ let page = 1;
 
 function onClickBtnSubmit(event) {
   event.preventDefault();
+  page += 1;
   value = refs.input.value.toLowerCase().trim();
 
   if (!value) {
-    clearInput();
-    refs.loadMore.setAttribute('hidden', 'hidden');
+    // clearInput();
+    // refs.loadMore.setAttribute('hidden', 'hidden');
     Notiflix.Notify.failure(
       'Sorry, there are no images matching your search query. Please try again.',
     );
     return;
   } else {
     clearInput();
-    // event.target.reset();
+    event.target.reset();
     fetchData(value, page)
       .then(checkResponce)
       .catch(error => console.log(error));
@@ -76,6 +77,7 @@ function checkResponce(responce) {
     refs.loadMore.removeAttribute('hidden');
   } else {
     clearInput();
+    refs.loadMore.setAttribute('hidden', 'hidden');
     Notiflix.Notify.failure(
       'Sorry, there are no images matching your search query. Please try again.',
     );

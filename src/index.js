@@ -51,6 +51,7 @@ function onClickBtnSubmit(event) {
     return;
   } else {
     clearInput();
+    // event.target.reset();
     fetchData(value, page)
       .then(checkResponce)
       .catch(error => console.log(error));

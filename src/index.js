@@ -15,7 +15,7 @@ import createGallery from './js/createGallery';
 // };
 
 // refs.loadMore.setAttribute('hidden', 'hidden');
-refs.form.addEventListener('input', debounce(onClickBtnSubmit, 500));
+refs.form.addEventListener('submit', onClickBtnSubmit);
 refs.loadMore.addEventListener('click', onClickAddPage);
 
 // function fetchData(value, page = 1) {

@@ -60,13 +60,6 @@ function onClickBtnSubmit(event) {
   }
 }
 
-function onClickAddPage() {
-  page += 1;
-  fetchData(value, page)
-    .then(responce => onLoadMoreImages(responce, page))
-    .catch(error => console.log(error));
-}
-
 function checkResponce(responce) {
   // console.log(responce);
   const responceHits = responce.hits;
@@ -83,6 +76,13 @@ function checkResponce(responce) {
       'Sorry, there are no images matching your search query. Please try again.',
     );
   }
+}
+
+function onClickAddPage() {
+  page += 1;
+  fetchData(value, page)
+    .then(responce => onLoadMoreImages(responce, page))
+    .catch(error => console.log(error));
 }
 
 // function createGallery(images) {
